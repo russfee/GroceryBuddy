@@ -1,0 +1,8 @@
+hand-fruit (prefer strawberries/blueberries/raspberries/grapes, quantity: 3)
+Greek yogurt (plain (no vanilla), large tub, compare unit price)
+eggs (large, 18-pack)
+sandwich bread (multigrain)
+Submarine Buns (white)
+chicken breasts (There's usually a decent $15 pack, some weeks will require $30 worth)
+cereal (kids like Vector/Rice Krispies, avoid super sugary)
+Milk (2% 4L)

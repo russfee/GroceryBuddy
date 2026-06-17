@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GroceryBuddy</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>GroceryBuddy</h1>
+        <p id="filePath">RussRodeo / GroceryBuddy</p>
+      </div>
+      <div class="topActions">
+        <button id="refreshButton" type="button">Refresh</button>
+        <button id="saveButton" type="button">Save</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="editorPane" aria-label="Markdown editor">
+        <nav id="tabs" class="tabs" aria-label="Grocery files"></nav>
+        <textarea id="editor" spellcheck="true"></textarea>
+        <div class="statusRow">
+          <span id="status">Ready</span>
+          <span id="wordCount">0 lines</span>
+        </div>
+      </section>
+
+      <aside class="sidePane">
+        <section class="panel">
+          <h2>Fresh Week</h2>
+          <label>
+            Date
+            <input id="weekDate" type="date">
+          </label>
+          <label>
+            Title
+            <input id="weekTitle" type="text" value="Grocery Week">
+          </label>
+          <button id="newWeekButton" type="button">Create Week</button>
+          <p id="weekResult"></p>
+        </section>
+
+        <section class="panel">
+          <h2>Reminders</h2>
+          <label>
+            List
+            <input id="reminderList" type="text" value="Groceries">
+          </label>
+          <div class="buttonRow">
+            <button id="loadListsButton" type="button">Lists</button>
+            <button id="importRemindersButton" type="button">Import</button>
+          </div>
+          <select id="reminderLists" size="4" aria-label="Reminder lists"></select>
+          <div id="reminderPreview"></div>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
