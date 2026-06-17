@@ -17,6 +17,8 @@ const reminderPreview = document.querySelector("#reminderPreview");
 let files = [];
 let activeName = "CommonList.md";
 let dirty = false;
+let appStatus = null;
+let apiPassword = sessionStorage.getItem("groceryBuddyPassword") || "";
 
 weekDate.value = new Date().toISOString().slice(0, 10);
 
@@ -38,8 +40,13 @@ reminderLists.addEventListener("change", () => {
 await loadFiles();
 
 async function loadFiles() {
-  const response = await fetch("/api/files");
+  await loadStatus();
+  const response = await apiFetch("/api/files");
   const data = await response.json();
+  if (!response.ok) {
+    updateStatus(data.error || "Could not load files");
+    return;
+  }
   files = data.files;
   if (!files.some((file) => file.name === activeName)) {
     activeName = files[0]?.name;
@@ -47,6 +54,15 @@ async function loadFiles() {
   renderTabs();
   renderEditor();
   updateStatus("Ready");
+}
+
+async function loadStatus() {
+  const response = await fetch("/api/status");
+  appStatus = await response.json();
+  const mode = appStatus.mode === "github"
+    ? `GitHub: ${appStatus.repo}@${appStatus.branch}`
+    : "Local files";
+  document.querySelector("#filePath").textContent = `RussRodeo / GroceryBuddy - ${mode}`;
 }
 
 function renderTabs() {
@@ -78,11 +94,15 @@ async function saveActiveFile() {
   const active = files.find((file) => file.name === activeName);
   if (!active) return;
   active.content = editor.value;
-  await fetch("/api/file", {
+  const response = await apiFetch("/api/file", {
     method: "POST",
-    headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: active.name, content: active.content })
   });
+  if (!response.ok) {
+    const data = await response.json();
+    updateStatus(data.error || "Save failed");
+    return;
+  }
   dirty = false;
   updateStatus("Saved");
 }
@@ -90,9 +110,8 @@ async function saveActiveFile() {
 async function createWeek() {
   if (dirty) await saveActiveFile();
   weekResult.textContent = "";
-  const response = await fetch("/api/week", {
+  const response = await apiFetch("/api/week", {
     method: "POST",
-    headers: { "content-type": "application/json" },
     body: JSON.stringify({ date: weekDate.value, title: weekTitle.value })
   });
   const data = await response.json();
@@ -104,7 +123,7 @@ async function loadReminderLists() {
   reminderPreview.textContent = "";
   reminderLists.replaceChildren();
   try {
-    const response = await fetch("/api/reminders/lists");
+    const response = await apiFetch("/api/reminders/lists");
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     for (const name of data.lists) {
@@ -124,7 +143,7 @@ async function importReminders() {
   if (dirty) await saveActiveFile();
   reminderPreview.textContent = "";
   try {
-    const response = await fetch(`/api/reminders?list=${encodeURIComponent(reminderList.value)}`);
+    const response = await apiFetch(`/api/reminders?list=${encodeURIComponent(reminderList.value)}`);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
     const lines = data.reminders.map((item) => `- ${item.name}${item.body ? ` (${item.body})` : ""}`);
@@ -132,9 +151,8 @@ async function importReminders() {
     const insertion = [``, `Reminders from ${data.list}:`, ...lines, ``].join("\n");
     addOns.content = `${addOns.content.trimEnd()}\n${insertion}`;
     if (activeName === "WeeklyAddOns.md") editor.value = addOns.content;
-    await fetch("/api/file", {
+    await apiFetch("/api/file", {
       method: "POST",
-      headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: addOns.name, content: addOns.content })
     });
     reminderPreview.textContent = lines.length ? lines.join("\n") : "No incomplete reminders";
@@ -155,4 +173,35 @@ function updateStatus(text) {
 function updateLineCount() {
   const lines = editor.value ? editor.value.split("\n").length : 0;
   wordCount.textContent = `${lines} lines`;
+}
+
+async function apiFetch(url, options = {}) {
+  const headers = {
+    "content-type": "application/json",
+    ...(options.headers || {})
+  };
+  if (apiPassword) headers["x-grocerybuddy-password"] = apiPassword;
+
+  let response = await fetch(url, { ...options, headers });
+  if (response.status !== 401) return response;
+
+  const password = window.prompt("GroceryBuddy password");
+  if (!password) return response;
+
+  apiPassword = password;
+  sessionStorage.setItem("groceryBuddyPassword", apiPassword);
+  response = await fetch(url, {
+    ...options,
+    headers: {
+      ...headers,
+      "x-grocerybuddy-password": apiPassword
+    }
+  });
+
+  if (response.status === 401) {
+    sessionStorage.removeItem("groceryBuddyPassword");
+    apiPassword = "";
+  }
+
+  return response;
 }

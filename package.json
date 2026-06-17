@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check lib/app.mjs && find api -name '*.mjs' -print0 | xargs -0 -n1 node --check && node --check public/app.js",
+    "sync": "git pull --ff-only"
   }
 }

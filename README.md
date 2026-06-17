@@ -1,8 +1,10 @@
 # GroceryBuddy
 
-Local helper for editing weekly grocery notes and turning them into a Superstore shopping plan.
+Local and GitHub-backed helper for editing weekly grocery notes and turning them into a Superstore shopping plan.
 
-Run it with:
+## Local Use
+
+Run it from this folder with:
 
 ```sh
 npm start
@@ -24,3 +26,31 @@ Files:
 - `weeks/`: generated weekly snapshots.
 
 Apple Reminders import uses the local macOS Reminders automation bridge. The first import may require granting permission.
+
+## Hosted Use
+
+When deployed with GitHub storage, the app edits the markdown files in this repository instead of editing files on your Mac.
+
+Set these environment variables on the host:
+
+```text
+GROCERYBUDDY_STORAGE=github
+GROCERYBUDDY_GITHUB_REPO=russfee/GroceryBuddy
+GROCERYBUDDY_GITHUB_BRANCH=main
+GROCERYBUDDY_GITHUB_TOKEN=...
+GROCERYBUDDY_PASSWORD=...
+```
+
+Use a fine-grained GitHub token with **Contents: Read and write** access for this repository. `GROCERYBUDDY_PASSWORD` protects the hosted editor so someone with the URL cannot edit the grocery files.
+
+Apple Reminders import is local-only. The hosted app can edit the files and create weekly snapshots, then the local runner can sync them before shopping:
+
+```sh
+npm run sync
+```
+
+## Checks
+
+```sh
+npm run check
+```
