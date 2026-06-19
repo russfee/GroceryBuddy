@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { ensureScaffold, handleApiRequest, serveStatic } from "./lib/app.mjs";
+import { ensureScaffold, handleApiRequest, serveStatic } from "../lib/app.mjs";
 
 const PORT = Number(process.env.PORT || 4322);
 
