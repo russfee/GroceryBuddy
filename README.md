@@ -20,12 +20,13 @@ Files:
 
 - `CommonList.md`: normal weekly staples.
 - `WeeklyAddOns.md`: one-off requests for the next order.
+- `ItemAliases.md`: shorthand mappings from Reminders to specific shopping intent.
 - `Preferences.md`: durable shopping rules.
 - `DoNotBuy.md`: exclusions and hard no items.
 - `MealPlan.md`: meals or loose food plans for the week.
 - `weeks/`: generated weekly snapshots.
 
-Apple Reminders import uses the local macOS Reminders automation bridge. The first import may require granting permission.
+Apple Reminders import uses the local macOS Reminders automation bridge. The first import may require granting permission. The importer reads active items from the top of the selected list and stops when completed items begin, which keeps long historical lists fast.
 
 ## Hosted Use
 
