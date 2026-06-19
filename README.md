@@ -28,6 +28,8 @@ Files:
 
 Apple Reminders import uses the local macOS Reminders automation bridge. The first import may require granting permission. The importer reads active items from the top of the selected list and stops when completed items begin, which keeps long historical lists fast.
 
+Local saves automatically commit and push the changed grocery file to GitHub. Set `GROCERYBUDDY_AUTO_PUSH=false` before `npm start` to turn that off.
+
 ## Hosted Use
 
 When deployed with GitHub storage, the app edits the markdown files in this repository instead of editing files on your Mac.

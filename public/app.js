@@ -103,8 +103,9 @@ async function saveActiveFile() {
     updateStatus(data.error || "Save failed");
     return;
   }
+  const data = await response.json();
   dirty = false;
-  updateStatus("Saved");
+  updateStatus(syncStatusText(data.sync, "Saved"));
 }
 
 async function createWeek() {
@@ -115,7 +116,7 @@ async function createWeek() {
     body: JSON.stringify({ date: weekDate.value, title: weekTitle.value })
   });
   const data = await response.json();
-  weekResult.textContent = response.ok ? `Created ${data.file}` : data.error;
+  weekResult.textContent = response.ok ? `Created ${data.file}. ${syncStatusText(data.sync, "")}`.trim() : data.error;
   weekResult.className = response.ok ? "" : "notice";
 }
 
@@ -151,15 +152,17 @@ async function importReminders() {
     const insertion = [``, `Reminders from ${data.list}:`, ...lines, ``].join("\n");
     addOns.content = `${addOns.content.trimEnd()}\n${insertion}`;
     if (activeName === "WeeklyAddOns.md") editor.value = addOns.content;
-    await apiFetch("/api/file", {
+    const saveResponse = await apiFetch("/api/file", {
       method: "POST",
       body: JSON.stringify({ name: addOns.name, content: addOns.content })
     });
+    const saveData = await saveResponse.json();
+    if (!saveResponse.ok) throw new Error(saveData.error || "Import save failed");
     reminderPreview.textContent = lines.length ? lines.join("\n") : "No incomplete reminders";
     activeName = "WeeklyAddOns.md";
     renderTabs();
     renderEditor();
-    updateStatus("Imported");
+    updateStatus(syncStatusText(saveData.sync, "Imported"));
   } catch (error) {
     reminderPreview.textContent = error.message;
     reminderPreview.className = "notice";
@@ -173,6 +176,15 @@ function updateStatus(text) {
 function updateLineCount() {
   const lines = editor.value ? editor.value.split("\n").length : 0;
   wordCount.textContent = `${lines} lines`;
+}
+
+function syncStatusText(sync, fallback) {
+  if (!sync) return fallback;
+  if (sync.status === "pushed") return sync.commit ? `${fallback} + pushed (${sync.commit.slice(0, 7)})` : `${fallback} + pushed`;
+  if (sync.status === "unchanged") return `${fallback} (no git changes)`;
+  if (sync.status === "disabled") return `${fallback} (git auto-push disabled)`;
+  if (sync.status === "failed") return `${fallback}; git push failed: ${sync.error}`;
+  return fallback;
 }
 
 async function apiFetch(url, options = {}) {
