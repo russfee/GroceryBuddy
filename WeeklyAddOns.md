@@ -21,3 +21,4 @@ Reminders from Grocery:
 Siri captures:
 - Test bananas
 - Test broccoli
+- Test granola
