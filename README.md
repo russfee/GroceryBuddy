@@ -30,6 +30,32 @@ Apple Reminders import uses the local macOS Reminders automation bridge. The fir
 
 Local saves automatically commit and push the changed grocery file to GitHub. Set `GROCERYBUDDY_AUTO_PUSH=false` before `npm start` to turn that off.
 
+## Siri Voice Capture
+
+GroceryBuddy has a small voice-capture endpoint for Apple Shortcuts:
+
+```text
+POST /api/capture
+```
+
+It appends one item to `WeeklyAddOns.md` under `Siri captures:` or another source-specific capture heading, then saves the file through the active storage mode. In hosted mode, that means the item is written straight to GitHub.
+
+Suggested iPhone Shortcut:
+
+1. Add **Dictate Text**.
+2. Add **Get Contents of URL**.
+3. Set the URL to `https://grocery-buddy-six.vercel.app/api/capture`.
+4. Set Method to `POST`.
+5. Set Request Body to `JSON`.
+6. Add `item` = the dictated text.
+7. Add `source` = `Siri`.
+8. Add header `x-grocerybuddy-password` = your `GROCERYBUDDY_PASSWORD`.
+9. Optional: add **Show Result** with a short confirmation.
+
+Then use Siri to run the Shortcut, for example: "Hey Siri, add grocery item."
+
+The endpoint also accepts plain text or form-encoded bodies, so it is forgiving if Shortcuts changes how it sends the request.
+
 ## Hosted Use
 
 When deployed with GitHub storage, the app edits the markdown files in this repository instead of editing files on your Mac.
