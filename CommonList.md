@@ -8,3 +8,5 @@ cereal (kids like Vector/Rice Krispies, avoid super sugary)
 Milk (2% 4L)
 Jalapeños (produce, 3x) 
 Zucchini (3x)
+Canned tomatoes: Whole tomatoes, look for sale
+Chocolate chips: regular milk (look for sales)
