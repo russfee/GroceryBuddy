@@ -7,3 +7,4 @@ chicken breasts (There's usually a decent $15 pack, some weeks will require $30 
 cereal (kids like Vector/Rice Krispies, avoid super sugary)
 Milk (2% 4L)
 Jalapeños (produce, 3x) 
+Zucchini (3x)
