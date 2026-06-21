@@ -56,6 +56,10 @@ Then use Siri to run the Shortcut, for example: "Hey Siri, add grocery item."
 
 The endpoint also accepts plain text or form-encoded bodies, so it is forgiving if Shortcuts changes how it sends the request.
 
+## Weekly Rhythm
+
+Use `Siri captures:` in `WeeklyAddOns.md` as the weekly inbox. When the grocery order is done, use **Finish Week** in the editor. It archives the current grocery files to `weeks/YYYY-MM-DD.md`, then clears the capture sections from `WeeklyAddOns.md` so the next week starts clean.
+
 ## Hosted Use
 
 When deployed with GitHub storage, the app edits the markdown files in this repository instead of editing files on your Mac.

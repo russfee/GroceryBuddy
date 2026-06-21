@@ -7,6 +7,7 @@ const saveButton = document.querySelector("#saveButton");
 const weekDate = document.querySelector("#weekDate");
 const weekTitle = document.querySelector("#weekTitle");
 const newWeekButton = document.querySelector("#newWeekButton");
+const finishWeekButton = document.querySelector("#finishWeekButton");
 const weekResult = document.querySelector("#weekResult");
 const reminderList = document.querySelector("#reminderList");
 const reminderLists = document.querySelector("#reminderLists");
@@ -31,6 +32,7 @@ editor.addEventListener("input", () => {
 });
 
 newWeekButton.addEventListener("click", createWeek);
+finishWeekButton.addEventListener("click", finishWeek);
 loadListsButton.addEventListener("click", loadReminderLists);
 importRemindersButton.addEventListener("click", importReminders);
 reminderLists.addEventListener("change", () => {
@@ -118,6 +120,31 @@ async function createWeek() {
   const data = await response.json();
   weekResult.textContent = response.ok ? `Created ${data.file}. ${syncStatusText(data.sync, "")}`.trim() : data.error;
   weekResult.className = response.ok ? "" : "notice";
+}
+
+async function finishWeek() {
+  if (dirty) await saveActiveFile();
+  weekResult.textContent = "";
+  const ok = window.confirm("Create a dated snapshot, then clear Siri captures from WeeklyAddOns?");
+  if (!ok) return;
+
+  const response = await apiFetch("/api/finish-week", {
+    method: "POST",
+    body: JSON.stringify({ date: weekDate.value, title: weekTitle.value })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    weekResult.textContent = data.error || "Finish week failed";
+    weekResult.className = "notice";
+    return;
+  }
+
+  weekResult.textContent = `Archived ${data.file}. ${data.cleared ? "Cleared captures." : "No captures to clear."}`;
+  weekResult.className = "";
+  await loadFiles();
+  activeName = "WeeklyAddOns.md";
+  renderTabs();
+  renderEditor();
 }
 
 async function loadReminderLists() {
