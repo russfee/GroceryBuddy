@@ -17,3 +17,6 @@ Reminders from Grocery:
 - Granola
 - Rubber gloves
 - Nut butter
+
+Siri captures:
+- Test bananas
