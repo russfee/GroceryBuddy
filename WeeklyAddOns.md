@@ -12,3 +12,4 @@ Siri captures:
 - Test bananas
 - Test broccoli
 - Test granola
+- Tomatoes
