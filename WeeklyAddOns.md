@@ -13,3 +13,4 @@ Siri captures:
 - Test broccoli
 - Test granola
 - Tomatoes
+- Jar of pickled jalapeños
