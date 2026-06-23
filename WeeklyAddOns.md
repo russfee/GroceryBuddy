@@ -15,3 +15,4 @@ Siri captures:
 - Tomatoes
 - Jar of pickled jalapeños
 - About 8 pounds of basmati rice
+- Green taco sauce
