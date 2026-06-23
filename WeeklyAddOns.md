@@ -14,3 +14,4 @@ Siri captures:
 - Test granola
 - Tomatoes
 - Jar of pickled jalapeños
+- About 8 pounds of basmati rice
