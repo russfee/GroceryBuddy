@@ -17,3 +17,4 @@ Siri captures:
 - About 8 pounds of basmati rice
 - Green taco sauce
 - Four Roma tomatoes and one red onion
+- Publicly
