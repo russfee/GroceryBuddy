@@ -8,3 +8,4 @@ Paper towel => paper towel, compare unit price and avoid tiny packs
 Paper towels => paper towel, compare unit price and avoid tiny packs
 Peanut Butter => Prefer Jif brand, but sales matter
 Nacho chips => tortilla chips or nacho chips, buy sale/value option
+Green taco sauce => La Costena Green Mexican Sauce

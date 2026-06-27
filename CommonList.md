@@ -6,6 +6,8 @@ Submarine Buns (white)
 chicken breasts (There's usually a decent $15 pack, some weeks will require $30 worth)
 cereal (kids like Vector/Rice Krispies, avoid super sugary)
 Milk (2% 4L)
+Bananas (regular, not organic)
+Mini cucumbers (pickle-sized 11-pack)
 Jalapeños (produce, 3x) 
 Zucchini (3x)
 Canned tomatoes: Whole tomatoes, look for sale
