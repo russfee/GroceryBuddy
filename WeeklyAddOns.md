@@ -17,3 +17,4 @@ Siri captures:
 - Bubbly
 - Peach flavoured
 - Large portion of oregano
+- Craft singles
