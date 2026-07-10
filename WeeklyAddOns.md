@@ -21,3 +21,4 @@ Siri captures:
 - Dijon mustard
 - Butter
 - Butter
+- Peanut butter
