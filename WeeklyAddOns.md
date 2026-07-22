@@ -22,3 +22,4 @@ Siri captures:
 - Butter
 - Butter
 - Peanut butter
+- Buffalo sauce
