@@ -23,3 +23,4 @@ Siri captures:
 - Butter
 - Peanut butter
 - Buffalo sauce
+- Pickled jalapeños
