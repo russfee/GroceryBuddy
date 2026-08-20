@@ -58,7 +58,19 @@ The endpoint also accepts plain text or form-encoded bodies, so it is forgiving 
 
 ## Weekly Rhythm
 
-Use `Siri captures:` in `WeeklyAddOns.md` as the weekly inbox. When the grocery order is done, use **Finish Week** in the editor. It archives the current grocery files to `weeks/YYYY-MM-DD.md`, then clears the capture sections from `WeeklyAddOns.md` so the next week starts clean.
+Use `Siri captures:` in `WeeklyAddOns.md` as the weekly inbox. After checkout confirms that the grocery order was placed, use **Order Placed** in the editor. It archives the current grocery files to `weeks/YYYY-MM-DD.md`, then clears the capture sections from `WeeklyAddOns.md` so the next week starts clean.
+
+Browser automation should treat a visible order-confirmation page or confirmed order number as the completion signal. Only after that signal, call:
+
+```text
+POST /api/order-placed
+Content-Type: application/json
+x-grocerybuddy-password: ...
+
+{"date":"YYYY-MM-DD","title":"Grocery Week","confirmed":true}
+```
+
+The endpoint refuses to clear captures unless `confirmed` is explicitly `true`. The older `/api/finish-week` endpoint remains available for compatibility, but the editor and shopping workflow use `/api/order-placed`.
 
 ## Hosted Use
 

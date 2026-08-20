@@ -32,7 +32,7 @@ editor.addEventListener("input", () => {
 });
 
 newWeekButton.addEventListener("click", createWeek);
-finishWeekButton.addEventListener("click", finishWeek);
+finishWeekButton.addEventListener("click", completePlacedOrder);
 loadListsButton.addEventListener("click", loadReminderLists);
 importRemindersButton.addEventListener("click", importReminders);
 reminderLists.addEventListener("change", () => {
@@ -122,24 +122,24 @@ async function createWeek() {
   weekResult.className = response.ok ? "" : "notice";
 }
 
-async function finishWeek() {
+async function completePlacedOrder() {
   if (dirty) await saveActiveFile();
   weekResult.textContent = "";
-  const ok = window.confirm("Create a dated snapshot, then clear Siri captures from WeeklyAddOns?");
+  const ok = window.confirm("Has the grocery order been successfully placed? This will archive the week and clear captured items.");
   if (!ok) return;
 
-  const response = await apiFetch("/api/finish-week", {
+  const response = await apiFetch("/api/order-placed", {
     method: "POST",
-    body: JSON.stringify({ date: weekDate.value, title: weekTitle.value })
+    body: JSON.stringify({ date: weekDate.value, title: weekTitle.value, confirmed: true })
   });
   const data = await response.json();
   if (!response.ok) {
-    weekResult.textContent = data.error || "Finish week failed";
+    weekResult.textContent = data.error || "Order completion failed";
     weekResult.className = "notice";
     return;
   }
 
-  weekResult.textContent = `Archived ${data.file}. ${data.cleared ? "Cleared captures." : "No captures to clear."}`;
+  weekResult.textContent = `Order recorded. Archived ${data.file}. ${data.cleared ? "Cleared captures." : "No captures to clear."}`;
   weekResult.className = "";
   await loadFiles();
   activeName = "WeeklyAddOns.md";

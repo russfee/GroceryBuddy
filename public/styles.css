@@ -179,6 +179,13 @@ button:hover {
   padding: 16px;
 }
 
+.panel .helperText {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 label {
   display: grid;
   gap: 6px;

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node scripts/local-server.mjs",
-    "check": "node --check scripts/local-server.mjs && node --check lib/app.mjs && find api -name '*.mjs' -print0 | xargs -0 -n1 node --check && node --check public/app.js",
+    "check": "node --check scripts/local-server.mjs && node --check lib/app.mjs && find api -name '*.mjs' -print0 | xargs -0 -n1 node --check && node --check public/app.js && node --test tests/*.test.mjs",
     "sync": "git pull --ff-only"
   }
 }
