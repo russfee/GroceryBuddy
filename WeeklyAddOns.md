@@ -9,3 +9,6 @@ Specific requests:
 Reminders from Grocery:
 
 Siri captures:
+
+Siri captures:
+- Lemon juice
