@@ -41,3 +41,11 @@ test("a new capture recreates its source section after cleanup", () => {
     "# Weekly Add Ons\n\nNeed this week:\n-\n\nSiri captures:\n- Milk\n"
   );
 });
+
+test("the first capture reuses an empty source heading", () => {
+  const emptySection = "# Weekly Add Ons\n\nSiri captures:\n";
+  assert.equal(
+    appendCapture(emptySection, "Lemon juice", "Siri"),
+    "# Weekly Add Ons\n\nSiri captures:\n- Lemon juice\n"
+  );
+});
