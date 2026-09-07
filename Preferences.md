@@ -4,7 +4,7 @@ Berries: Usually like about 3 varieties, typically strawberries, raspberries, gr
 Yogurt: plain Greek only, 0%, no vanilla.
 Fruit Yogurt: Raspberry or strawberry, look for sales, larger tub
 Cereal: Vector, Rice Krispies, and Honey Nut Cheerios are okay
-Bread: multigrain sandwich bread; white submarine buns.
+Bread: multigrain sandwich bread.
 Bananas: regular, not organic
 Cucumbers: pickle-sized 11-pack
 Zuchini: usually we buy about 3/week
