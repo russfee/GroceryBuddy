@@ -11,3 +11,4 @@ Jalapeños (produce, 3x)
 Zucchini (3x)
 Canned tomatoes: Whole tomatoes, look for sale
 Chocolate chips: regular milk (look for sales)
+Butterball applewood smoked turkey bacon
