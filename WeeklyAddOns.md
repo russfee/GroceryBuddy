@@ -11,3 +11,4 @@ Reminders from Grocery:
 Siri captures:
 - Lemon juice
 - Cumin
+- Apples
