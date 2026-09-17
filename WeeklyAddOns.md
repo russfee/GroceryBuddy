@@ -14,3 +14,4 @@ Siri captures:
 - Apples
 - Peppercorns
 - Lime bubbly
+- Strawberry jam
