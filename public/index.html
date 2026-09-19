@@ -3,64 +3,158 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173f35">
     <title>GroceryBuddy</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
     <header class="topbar">
-      <div>
-        <h1>GroceryBuddy</h1>
-        <p id="filePath">RussRodeo / GroceryBuddy</p>
-      </div>
+      <a class="brand" href="#this-week" aria-label="GroceryBuddy home">
+        <span class="brandMark" aria-hidden="true">G</span>
+        <span>
+          <strong>GroceryBuddy</strong>
+          <small id="filePath">Loading your lists…</small>
+        </span>
+      </a>
+
       <div class="topActions">
-        <button id="refreshButton" type="button">Refresh</button>
-        <button id="saveButton" type="button">Save</button>
+        <span id="syncStatus" class="syncStatus" aria-live="polite">Connecting…</span>
+        <button id="refreshButton" class="button buttonQuiet" type="button">
+          <span aria-hidden="true">↻</span> Refresh
+        </button>
       </div>
     </header>
 
-    <main class="shell">
-      <section class="editorPane" aria-label="Markdown editor">
-        <nav id="tabs" class="tabs" aria-label="Grocery files"></nav>
-        <textarea id="editor" spellcheck="true"></textarea>
-        <div class="statusRow">
-          <span id="status">Ready</span>
-          <span id="wordCount">0 lines</span>
+    <nav class="viewNav" aria-label="GroceryBuddy views">
+      <div class="viewNavInner">
+        <button id="overviewTab" class="viewTab active" type="button" aria-selected="true">This week</button>
+        <button id="editorTab" class="viewTab" type="button" aria-selected="false">Edit lists</button>
+      </div>
+    </nav>
+
+    <main>
+      <section id="overviewView" class="overviewView" aria-labelledby="weekHeading">
+        <div class="weekHero">
+          <div>
+            <p class="eyebrow">Your next grocery run</p>
+            <h1 id="weekHeading">This week’s list</h1>
+            <p class="heroIntro">Everything in one place: weekly requests first, regular staples right below.</p>
+          </div>
+          <div id="weeklyMeta" class="weeklyMeta" aria-label="List summary"></div>
+        </div>
+
+        <form id="quickAddForm" class="quickAdd">
+          <label for="quickAddInput">Add something for this week</label>
+          <div class="quickAddRow">
+            <input id="quickAddInput" type="text" autocomplete="off" placeholder="e.g. taco shells" maxlength="160">
+            <button id="quickAddButton" class="button buttonPrimary" type="submit">Add item</button>
+          </div>
+          <p class="fieldHint">Adds to “Need this week” and saves immediately.</p>
+        </form>
+
+        <p id="overviewNotice" class="overviewNotice" aria-live="polite"></p>
+
+        <div class="dashboardGrid">
+          <section class="listCard listCardPrimary" aria-labelledby="extrasHeading">
+            <div class="cardHeading">
+              <div>
+                <p class="cardKicker">One-off requests</p>
+                <h2 id="extrasHeading">Added for this week</h2>
+              </div>
+              <span id="extrasCount" class="countBadge">0</span>
+            </div>
+            <ul id="weeklyExtras" class="itemList itemListLarge"></ul>
+          </section>
+
+          <section class="listCard" aria-labelledby="staplesHeading">
+            <div class="cardHeading">
+              <div>
+                <p class="cardKicker">Every week</p>
+                <h2 id="staplesHeading">Regular staples</h2>
+              </div>
+              <span id="staplesCount" class="countBadge countBadgeNeutral">0</span>
+            </div>
+            <ul id="staplesList" class="itemList itemListCompact"></ul>
+          </section>
+
+          <section id="mealPlanCard" class="listCard" aria-labelledby="mealPlanHeading">
+            <div class="cardHeading">
+              <div>
+                <p class="cardKicker">Planning notes</p>
+                <h2 id="mealPlanHeading">Meal plan</h2>
+              </div>
+            </div>
+            <ul id="mealPlanList" class="itemList"></ul>
+          </section>
+
+          <section class="listCard listCardWarning" aria-labelledby="doNotBuyHeading">
+            <div class="cardHeading">
+              <div>
+                <p class="cardKicker">Hard exclusions</p>
+                <h2 id="doNotBuyHeading">Do not buy</h2>
+              </div>
+            </div>
+            <ul id="doNotBuyList" class="itemList"></ul>
+          </section>
         </div>
       </section>
 
-      <aside class="sidePane">
-        <section class="panel">
-          <h2>Complete Order</h2>
-          <label>
-            Date
-            <input id="weekDate" type="date">
-          </label>
-          <label>
-            Title
-            <input id="weekTitle" type="text" value="Grocery Week">
-          </label>
-          <div class="buttonRow">
-            <button id="newWeekButton" type="button">Create Week</button>
-            <button id="finishWeekButton" type="button">Order Placed</button>
-          </div>
-          <p class="helperText">After checkout succeeds, archive this week and clear captured items.</p>
-          <p id="weekResult"></p>
-        </section>
+      <section id="editorView" class="editorView" aria-label="Edit grocery files" hidden>
+        <div class="editorLayout">
+          <section class="editorPane" aria-label="Markdown editor">
+            <div class="editorHeader">
+              <div>
+                <p class="eyebrow">Source files</p>
+                <h1>Edit grocery lists</h1>
+              </div>
+              <button id="saveButton" class="button buttonPrimary" type="button">Save changes</button>
+            </div>
+            <nav id="tabs" class="tabs" aria-label="Grocery files"></nav>
+            <label class="editorLabel" for="editor">File contents</label>
+            <textarea id="editor" spellcheck="true"></textarea>
+            <div class="statusRow">
+              <span id="status" aria-live="polite">Ready</span>
+              <span id="wordCount">0 lines</span>
+            </div>
+          </section>
 
-        <section class="panel">
-          <h2>Reminders</h2>
-          <label>
-            List
-            <input id="reminderList" type="text" value="Grocery">
-          </label>
-          <div class="buttonRow">
-            <button id="loadListsButton" type="button">Lists</button>
-            <button id="importRemindersButton" type="button">Import</button>
-          </div>
-          <select id="reminderLists" size="4" aria-label="Reminder lists"></select>
-          <div id="reminderPreview"></div>
-        </section>
-      </aside>
+          <aside class="sidePane" aria-label="Grocery tools">
+            <section class="panel">
+              <p class="cardKicker">After a confirmed order</p>
+              <h2>Complete order</h2>
+              <label>
+                Date
+                <input id="weekDate" type="date">
+              </label>
+              <label>
+                Archive title
+                <input id="weekTitle" type="text" value="Grocery Week">
+              </label>
+              <div class="buttonRow">
+                <button id="newWeekButton" class="button" type="button">Create snapshot</button>
+                <button id="finishWeekButton" class="button buttonDanger" type="button">Order placed</button>
+              </div>
+              <p class="helperText">Only use “Order placed” after checkout succeeds. It archives the week and clears captured items.</p>
+              <p id="weekResult" class="panelResult" aria-live="polite"></p>
+            </section>
+
+            <section class="panel">
+              <p class="cardKicker">Local Mac only</p>
+              <h2>Apple Reminders</h2>
+              <label>
+                List
+                <input id="reminderList" type="text" value="Grocery">
+              </label>
+              <div class="buttonRow">
+                <button id="loadListsButton" class="button" type="button">Find lists</button>
+                <button id="importRemindersButton" class="button buttonPrimary" type="button">Import</button>
+              </div>
+              <select id="reminderLists" size="4" aria-label="Reminder lists"></select>
+              <div id="reminderPreview" class="panelResult" aria-live="polite"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
     </main>
 
     <script type="module" src="/app.js"></script>

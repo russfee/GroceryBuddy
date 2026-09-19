@@ -26,6 +26,17 @@ Files:
 - `MealPlan.md`: meals or loose food plans for the week.
 - `weeks/`: generated weekly snapshots.
 
+## Weekly Dashboard
+
+GroceryBuddy opens on **This week**, a consolidated view of:
+
+- one-off requests and Siri captures from `WeeklyAddOns.md`;
+- recurring staples from `CommonList.md`;
+- meal-planning notes from `MealPlan.md`; and
+- hard exclusions from `DoNotBuy.md`.
+
+Use **Add something for this week** to append an item to the `Need this week:` section and save it immediately. The original Markdown editor, order-completion controls, and local Apple Reminders importer remain available under **Edit lists**.
+
 Apple Reminders import uses the local macOS Reminders automation bridge. The first import may require granting permission. The importer reads active items from the top of the selected list and stops when completed items begin, which keeps long historical lists fast.
 
 Local saves automatically commit and push the changed grocery file to GitHub. Set `GROCERYBUDDY_AUTO_PUSH=false` before `npm start` to turn that off.
