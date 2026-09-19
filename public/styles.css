@@ -223,6 +223,99 @@ h2 {
   border-bottom-color: var(--lime);
 }
 
+.authGate {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(14, 39, 32, 0.76);
+  backdrop-filter: blur(9px);
+}
+
+.authCard {
+  width: min(100%, 440px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 26px;
+  padding: 34px;
+  background: #fff;
+  box-shadow: 0 28px 80px rgba(8, 28, 22, 0.3);
+}
+
+.authMark {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 24px;
+  border-radius: 15px;
+  background: var(--lime);
+  color: var(--forest);
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.authCard h1 {
+  margin-bottom: 12px;
+  font-size: clamp(32px, 8vw, 44px);
+}
+
+.authIntro {
+  margin-bottom: 24px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.authForm {
+  display: grid;
+  gap: 10px;
+}
+
+.authForm label {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.authForm input {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 0 14px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.authForm input:focus {
+  border-color: var(--forest-2);
+}
+
+.authForm .button {
+  min-height: 50px;
+  margin-top: 4px;
+}
+
+.authMessage {
+  min-height: 20px;
+  margin: 13px 0 0;
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.authMessage:empty {
+  display: none;
+}
+
+.authHint {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .overviewView,
 .editorView {
   max-width: 1240px;
@@ -714,6 +807,16 @@ h1 {
 
   #editor {
     min-height: 460px;
+  }
+
+  .authGate {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .authCard {
+    border-radius: 22px;
+    padding: 26px 22px;
   }
 }
 

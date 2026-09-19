@@ -1,5 +1,10 @@
 const overviewTab = document.querySelector("#overviewTab");
 const editorTab = document.querySelector("#editorTab");
+const authGate = document.querySelector("#authGate");
+const authForm = document.querySelector("#authForm");
+const authPassword = document.querySelector("#authPassword");
+const authButton = document.querySelector("#authButton");
+const authMessage = document.querySelector("#authMessage");
 const overviewView = document.querySelector("#overviewView");
 const editorView = document.querySelector("#editorView");
 const tabs = document.querySelector("#tabs");
@@ -51,6 +56,7 @@ weekDate.value = new Date().toISOString().slice(0, 10);
 
 overviewTab.addEventListener("click", () => switchView("overview"));
 editorTab.addEventListener("click", () => switchView("editor"));
+authForm.addEventListener("submit", authenticate);
 refreshButton.addEventListener("click", loadFiles);
 saveButton.addEventListener("click", saveActiveFile);
 quickAddForm.addEventListener("submit", addQuickItem);
@@ -82,13 +88,20 @@ async function switchView(view) {
   if (showOverview) renderOverview();
 }
 
-async function loadFiles() {
+async function loadFiles({ authAttempt = false } = {}) {
   setRefreshBusy(true);
   clearOverviewNotice();
   try {
     await loadStatus();
     const response = await apiFetch("/api/files");
     const data = await response.json();
+    if (response.status === 401) {
+      clearApiPassword();
+      showAuth(authAttempt ? "That password didn’t work. Try again." : "Enter your password to load the grocery lists.");
+      updateStatus("Sign in required");
+      syncStatus.textContent = "Sign in required";
+      return false;
+    }
     if (!response.ok) throw new Error(data.error || "Could not load grocery files");
     files = data.files;
     if (!files.some((file) => file.name === activeName)) {
@@ -97,15 +110,57 @@ async function loadFiles() {
     renderTabs();
     renderEditor();
     renderOverview();
+    hideAuth();
     updateStatus("Ready");
     syncStatus.textContent = `Updated ${new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date())}`;
+    return true;
   } catch (error) {
     updateStatus(error.message);
-    showOverviewNotice(error.message, true);
+    if (authAttempt) showAuth(error.message);
+    else showOverviewNotice(error.message, true);
     syncStatus.textContent = "Could not refresh";
+    return false;
   } finally {
     setRefreshBusy(false);
   }
+}
+
+async function authenticate(event) {
+  event.preventDefault();
+  const password = authPassword.value;
+  if (!password) return;
+
+  apiPassword = password;
+  sessionStorage.setItem("groceryBuddyPassword", apiPassword);
+  authButton.disabled = true;
+  authButton.textContent = "Opening…";
+  authMessage.textContent = "";
+
+  const loaded = await loadFiles({ authAttempt: true });
+  if (loaded) authPassword.value = "";
+  else {
+    authPassword.focus();
+    authPassword.select();
+  }
+
+  authButton.disabled = false;
+  authButton.textContent = "Open my list";
+}
+
+function showAuth(message) {
+  authMessage.textContent = message;
+  authGate.hidden = false;
+  requestAnimationFrame(() => authPassword.focus());
+}
+
+function hideAuth() {
+  authGate.hidden = true;
+  authMessage.textContent = "";
+}
+
+function clearApiPassword() {
+  apiPassword = "";
+  sessionStorage.removeItem("groceryBuddyPassword");
 }
 
 async function loadStatus() {
@@ -453,26 +508,7 @@ async function apiFetch(url, options = {}) {
   };
   if (apiPassword) headers["x-grocerybuddy-password"] = apiPassword;
 
-  let response = await fetch(url, { ...options, headers });
-  if (response.status !== 401) return response;
-
-  const password = window.prompt("GroceryBuddy password");
-  if (!password) return response;
-
-  apiPassword = password;
-  sessionStorage.setItem("groceryBuddyPassword", apiPassword);
-  response = await fetch(url, {
-    ...options,
-    headers: {
-      ...headers,
-      "x-grocerybuddy-password": apiPassword
-    }
-  });
-
-  if (response.status === 401) {
-    sessionStorage.removeItem("groceryBuddyPassword");
-    apiPassword = "";
-  }
-
+  const response = await fetch(url, { ...options, headers });
+  if (response.status === 401) clearApiPassword();
   return response;
 }
